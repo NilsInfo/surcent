@@ -1,3 +1,6 @@
 notice_nils.md
 .venv
 .env
+routes/__pycache__
+utils/__pycache__   
+__pycache__

@@ -1,8 +1,13 @@
-<h1>Hello, World!</h1>
+<h1>SURCENT</h1>
+<p>You are logged in as {{ user }}</p>
 
 
+Créer une nouvelle statistique : (vue admin only au départ ?)
 <form action="/stats/create" method="post">
     <input type="text" name="description" placeholder="Enter stat description">
     <input type="text" name="value" placeholder="Enter stat value">
     <button type="submit">Add new stat</button>
 </form>
+
+
+<button><a href="/auth/logout">Logout</a></button>

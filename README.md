@@ -1,7 +1,7 @@
 ## SETUP
 1. clone project 
 2. create virtual environment with python
-3. in virtual environment, add Flask, mongoDB, python-dotenv
+3. in virtual environment, add Flask, mongoDB, python-dotenv, bcrypt
     pip install flask pymongo python-dotenv
 4. run app 
     flask --app main run
