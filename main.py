@@ -1,10 +1,20 @@
-from flask import Flask, abort
+from flask import Flask, abort, render_template, request, redirect, url_for
+from pymongo import MongoClient
+from config import Config
 
 app = Flask(__name__)
+app.config.from_object(Config)
+
+client = MongoClient(app.config['MONGO_URI'])
+db = client.get_default_database()
+app.db = db
+
+from routes.statItems import items_bp
+app.register_blueprint(items_bp)
 
 @app.route("/")
-def hello_world():
-    return "<h1>Hello, World!</h1>"
+def home():
+    return render_template("home.html")
 
 @app.route("/user")
 def get_user():
@@ -35,6 +45,7 @@ def get_next_stat(cookies):
         "number": "",
         "sources": "",
     }
+
 
 @app.post("/stat")
 def post_stat(content):
