@@ -4,9 +4,38 @@
 
 Créer une nouvelle statistique : (vue admin only au départ ?)
 <form action="/stats/create" method="post">
-    <input type="text" name="description" placeholder="Enter stat description">
-    <input type="text" name="value" placeholder="Enter stat value">
-    <button type="submit">Add new stat</button>
+    
+    <label for="title" style="display:block">Titre
+        <input type="text" name="title" placeholder="Sur cent ..., combien ... ?">
+    </label>
+    <label for="description" style="display:block">Description
+        <input type="text" name="description" placeholder="Plus d'infos...">
+    </label>
+    <label for="answer" style="display:block">Réponse entre 0 et 100
+        <input type="number" max=100 min=0 name="answer" placeholder="Valeur de la réponse">
+    </label>
+    # TODO : possibilité de mettre plusieurs sources
+    <label for="source" style="display:block">Source
+        <input type="text" name="source" placeholder="URL de la source">
+    </label>
+    <label for="year" style="display:block">Année de validité
+        <input type="number" max=2026 name="year" placeholder="Année où cette stat est valide">
+    </label>
+    <fieldset>
+        <legend>Échelle où cette stat est valide</legend>
+        <input type="radio" name="scope" value="world">
+        <label for="world">Monde</label>
+        <input type="radio" name="scope" value="continent">
+        <label for="world">Continent</label>
+        <input type="radio" name="scope" value="country">
+        <label for="world">Pays</label>
+        <input type="radio" name="scope" value="region">
+        <label for="world">Régionnal</label>
+        <input type="radio" name="scope" value="city">
+        <label for="world">Ville ou plus petit</label>
+    </fieldset>
+    
+    <button type="submit">Ajouter la stat</button>
 </form>
 
 

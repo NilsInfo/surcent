@@ -11,8 +11,12 @@ def col():
 @items_bp.route("/create", methods=["POST"])
 def create_item_form():
     data = {
+        "title": request.form.get("title"),
         "description": request.form.get("description"),
-        "value": request.form.get("value")
+        "year": request.form.get("year"),
+        "scope": request.form.get("scope"),
+        "answer": request.form.get("answer"),
+        "source": request.form.get("source"),
     }
     col().insert_one(data)
     return redirect(url_for("home"))
