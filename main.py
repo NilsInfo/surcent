@@ -18,6 +18,8 @@ from routes.statItems import items_bp
 app.register_blueprint(items_bp)
 from routes.auth import auth_bp
 app.register_blueprint(auth_bp)
+from routes.quizz import quizz_bp
+app.register_blueprint(quizz_bp)
 
 @app.route("/")
 @login_required

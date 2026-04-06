@@ -53,3 +53,4 @@ def login_get():
 def logout():
     session.pop("user", None)
     return redirect(url_for("home"))
+
