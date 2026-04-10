@@ -1,28 +1,31 @@
-<p>You are connected as {{ user }}</p>
-<p>You have answered {{ userQuizzesDone }} out of {{ totalQuizzes }} quizzes.</p>
+{% extends 'base.html' %}
+{% block content %}
+    <p>You are connected as {{ user }}</p>
+    <p>You have answered {{ userQuizzesDone }} out of {{ totalQuizzes }} quizzes.</p>
 
-{{question}}
+    {{question}}
 
-<form id="quizzForm" method="POST">   
-    <input type="hidden" name="id" value="{{ id }}">
-    <input type="text" name="value" placeholder="Value between 0 and 100">
-    <button type="button" onclick="submitAnswer()">Submit</button>
-</form>
+    <form id="quizzForm" method="POST">   
+        <input type="hidden" name="id" value="{{ id }}">
+        <input type="text" name="value" placeholder="Value between 0 and 100">
+        <button type="button" onclick="submitAnswer()">Submit</button>
+    </form>
 
-<div id="result"></div>
+    <div id="result"></div>
 
-<button><a href="/quizz">New quizz</a></button>
-<script>    
+    <button><a href="/quizz">New quizz</a></button>
+    <script>    
 
-    async function submitAnswer() {
-        const form = document.getElementById("quizzForm");
-        const formData = new FormData(form); 
-        const response = await fetch("/quizz/answer", {
-            method: "POST",
-            body: formData
-        });
+        async function submitAnswer() {
+            const form = document.getElementById("quizzForm");
+            const formData = new FormData(form); 
+            const response = await fetch("/quizz/answer", {
+                method: "POST",
+                body: formData
+            });
 
-        const data = await response.json();
-        document.getElementById("result").innerText = data.message;
-    }
-</script>
+            const data = await response.json();
+            document.getElementById("result").innerText = data.message;
+        }
+    </script>
+{% endblock  %}

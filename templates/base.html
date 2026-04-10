@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <link rel="stylesheet" href="style.css" />
+    <title>{% block title %}{% endblock %} - SURCENT</title>
+    {% endblock %}
+</head>
+<body>
+    {% if user %}
+        <p>You are logged in as {{ user }}</p>
+    {% else %}
+        <a href="/auth/login">Login</a>
+    {% endif %}
+    {% if user %}
+        <button><a href="/auth/logout">Logout</a></button>
+    {% endif %}
+    <br/>
+    <h1>SURCENT</h1>
+    <br/>
+    
+    <div id="content">{% block content %}{% endblock %}</div>
+    <div id="footer">
+        <br/>
+        ---
+        <br/>
+        {% block footer %}
+        {% if user %}
+        <button><a href="/stats/new">Ajouter une nouvelle stat</a></button>
+        {%endif %}
+        {% endblock %}
+
+        <br/>
+        <p>&copy;AMYONCORP.</p>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+

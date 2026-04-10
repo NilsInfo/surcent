@@ -22,7 +22,6 @@ from routes.quizz import quizz_bp
 app.register_blueprint(quizz_bp)
 
 @app.route("/")
-@login_required
 def home():
     # print("User in session:", session.get("user"))
     return render_template("home.html", user=session.get("user"))

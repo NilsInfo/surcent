@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, current_app, redirect, url_for
+from flask import Blueprint, render_template, request, jsonify, current_app, redirect, session, url_for
 from bson import ObjectId
 
 items_bp = Blueprint("stats", __name__, url_prefix="/stats")
@@ -6,6 +6,10 @@ items_bp = Blueprint("stats", __name__, url_prefix="/stats")
 def col():
     return current_app.db.items  # 'items' collection
 
+@items_bp.route("/new")
+def add_quizz():
+    # print("User in session:", session.get("user"))
+    return render_template("add_quizz.html", user=session.get("user"))
 
 # ── CREATE ──────────────────────────────────────────────
 @items_bp.route("/create", methods=["POST"])
