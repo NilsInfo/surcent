@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 // CREATE SCENE AND CAMERA
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -28,14 +28,19 @@ loader.load( '/static/3D_objects/test.glb', function ( gltf ) {
 }, undefined, function ( error ) {
   console.error( error );
 } );
+
 camera.position.z = 5;
+// OrbitControls to orbit around 0
+// To orbit around specific target, see https://github.com/mrdoob/three.js/blob/master/examples/webgl_animation_keyframes.html
+const controls = new OrbitControls( camera, renderer.domElement );
 
 // ANIMATE
 function animate( time ) {
-  if(sphere){
-    sphere.rotation.x = time / 2000;
-    sphere.rotation.y = time / 1000;
-  }
+  controls.update();
+  // if(sphere){
+  //   sphere.rotation.x = time / 2000;
+  //   sphere.rotation.y = time / 1000;
+  // }
   
   renderer.render( scene, camera );
 }
