@@ -21,13 +21,26 @@ scene.add(directionalLight);
 
 // LOAD MY OBJECT
 const loader = new GLTFLoader();
-let sphere
+let globe
 loader.load( '/static/3D_objects/test.glb', function ( gltf ) {
-  sphere = gltf.scene
-  scene.add( sphere );
+  globe = gltf.scene
+  scene.add( globe );
 }, undefined, function ( error ) {
   console.error( error );
 } );
+
+// TRY HAVING A box ABOVE
+const width = 0.2
+let px = 1+ width/2;
+let py = 0;
+let pz = 0;
+const material = new THREE.MeshPhongMaterial({
+  color: 0xFFFF00,   
+  flatShading: true,
+});
+const box = new THREE.Mesh( new THREE.BoxGeometry( width, width, width ), material );
+box.position.set(px, py, pz )
+scene.add(box)
 
 camera.position.z = 5;
 // OrbitControls to orbit around 0
@@ -35,12 +48,17 @@ camera.position.z = 5;
 const controls = new OrbitControls( camera, renderer.domElement );
 
 // ANIMATE
+
 function animate( time ) {
   controls.update();
-  // if(sphere){
-  //   sphere.rotation.x = time / 2000;
-  //   sphere.rotation.y = time / 1000;
-  // }
+  if(globe && box){
+    let xmov=time/2000
+    let ymov = time/1000
+    box.position.x = Math.cos(xmov)*Math.cos(ymov);
+    box.position.y = Math.sin(xmov)*Math.cos(ymov);
+    box.position.z = Math.sin(ymov);
+    box.lookAt(0, 0, 0); // to rotate the box according to its position (always look at the center of the globe)
+  }
   
   renderer.render( scene, camera );
 }

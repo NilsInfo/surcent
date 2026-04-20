@@ -11,8 +11,8 @@
     SECRET_KEY=secret-key
     `
 5. install mongoDB community server
-6. run app 
-    `flask --app main run`
+6. run app (--debug for autoreload on code change)
+    `flask --app main --debug run`
 
 ## Use cases 
 
