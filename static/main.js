@@ -30,15 +30,54 @@ loader.load( '/static/3D_objects/test.glb', function ( gltf ) {
   console.error( error );
 } );
 
+
+let top = 0
+let middle = 0
+let bottom = 0
 // ajout des petits bonhommes
 let mixers = [];
+const center = new THREE.Vector3(0, 0, 0);
+const radius = 1
 for(let i = 0; i < 10; i++)
 {
   loader.load('static/3D_objects/bonhomme3animations.glb', function ( gltf ) {
     
-    
+      // current position :
+      //  2 on top of globe - 6 in the middle - 2 bottom
       const smallGuy = gltf.scene
-      smallGuy.position.set(i*2, 0, 0);
+      // compute position 
+      if (top < 2)
+      {
+        const angle = (top / 2) * Math.PI * 2
+        top++
+        smallGuy.position.set(          
+          center.x + Math.cos(angle) * radius,
+          center.y + 1,
+          center.z + Math.sin(angle) * radius
+        )
+      }
+      else if (middle < 6)
+      {
+        const angle = (middle / 6) * Math.PI * 2
+        middle++
+        smallGuy.position.set(          
+          center.x + Math.cos(angle) * radius,
+          center.y,
+          center.z + Math.sin(angle) * radius
+        )
+      }
+      else
+      {
+        const angle = (bottom / 2) * Math.PI * 2
+        bottom++
+        smallGuy.position.set(          
+          center.x + Math.cos(angle) * radius,
+          center.y - 1,
+          center.z + Math.sin(angle) * radius
+        )
+      }
+      smallGuy.scale.setScalar(0.1)
+      smallGuy.rotation.y = Math.PI / 2;
       scene.add( smallGuy );
 
       mixers[i] = new THREE.AnimationMixer(smallGuy);
