@@ -4,6 +4,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 // CREATE SCENE AND CAMERA
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+const clock = new THREE.Clock();
 
 // CREATE RENDERER IN HTML DOC
 const renderer = new THREE.WebGLRenderer();
@@ -29,6 +30,34 @@ loader.load( '/static/3D_objects/test.glb', function ( gltf ) {
   console.error( error );
 } );
 
+// ajout des petits bonhommes
+let mixers = [];
+for(let i = 0; i < 10; i++)
+{
+  loader.load('static/3D_objects/bonhomme3animations.glb', function ( gltf ) {
+    
+    
+      const smallGuy = gltf.scene
+      smallGuy.position.set(i*2, 0, 0);
+      scene.add( smallGuy );
+
+      mixers[i] = new THREE.AnimationMixer(smallGuy);
+      const animations = gltf.animations;
+
+      //console.log(animations)
+
+      if (animations && animations.length > 0) {
+        const action = mixers[i].clipAction(animations[4]); // idle low animation
+        action.play();
+      }
+
+    
+
+  }, undefined, function ( error ) {
+    console.error( error );
+  } );
+
+  }
 // TRY HAVING A box ABOVE
 const width = 0.2
 let px = 1+ width/2;
@@ -48,7 +77,6 @@ camera.position.z = 5;
 const controls = new OrbitControls( camera, renderer.domElement );
 
 // ANIMATE
-
 function animate( time ) {
   controls.update();
   if(globe && box){
@@ -59,7 +87,15 @@ function animate( time ) {
     box.position.z = Math.sin(ymov);
     box.lookAt(0, 0, 0); // to rotate the box according to its position (always look at the center of the globe)
   }
+
+  requestAnimationFrame(animate);
+
+  const delta = clock.getDelta();
   
+for(let i = 0; i < 10; i++)
+{
+  if (mixers[i]) mixers[i].update(delta);
+}
   renderer.render( scene, camera );
 }
 renderer.setAnimationLoop( animate );
