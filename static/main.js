@@ -1,10 +1,17 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import Stats from 'stats.js';
+
 // CREATE SCENE AND CAMERA
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 const clock = new THREE.Clock();
+
+// CREATE Panel to see FPS
+const stats = new Stats();
+stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb
+document.body.appendChild( stats.dom );
 
 // CREATE RENDERER IN HTML DOC
 const renderer = new THREE.WebGLRenderer();
@@ -114,9 +121,12 @@ camera.position.z = 5;
 // OrbitControls to orbit around 0
 // To orbit around specific target, see https://github.com/mrdoob/three.js/blob/master/examples/webgl_animation_keyframes.html
 const controls = new OrbitControls( camera, renderer.domElement );
-
+let lastTime = 0;
 // ANIMATE
 function animate( time ) {
+  if(time - lastTime < 1000/60) return; // limit to 60 fps
+  lastTime = time;
+  stats.begin();
   controls.update();
   if(globe && box){
     let xmov=time/2000
@@ -131,10 +141,12 @@ function animate( time ) {
 
   const delta = clock.getDelta();
   
-for(let i = 0; i < 10; i++)
-{
-  if (mixers[i]) mixers[i].update(delta);
-}
+  for(let i = 0; i < 10; i++)
+  {
+    if (mixers[i]) mixers[i].update(delta);
+  }
+
   renderer.render( scene, camera );
+  stats.end();
 }
 renderer.setAnimationLoop( animate );
