@@ -15,7 +15,7 @@ document.body.appendChild( stats.dom );
 
 // CREATE RENDERER IN HTML DOC
 const renderer = new THREE.WebGLRenderer();
-renderer.setSize( window.innerWidth/2, window.innerHeight/2 );
+renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
 // Lumière ambiante — éclaire tout uniformément
