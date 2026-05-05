@@ -47,7 +47,7 @@ const center = new THREE.Vector3(0, 0, 0);
 const radius = 1
 for(let i = 0; i < 10; i++)
 {
-  loader.load('static/3D_objects/bonhomme3animations.glb', function ( gltf ) {
+  loader.load('/static/3D_objects/bonhomme3animations.glb', function ( gltf ) {
     
       // current position :
       //  2 on top of globe - 6 in the middle - 2 bottom
