@@ -15,21 +15,35 @@ def quizzes_users():
 @quizz_bp.route("/", methods=["GET"])
 def quizz():
     quizzesDone = list(quizzes_users().find({"user": session.get("user")}))
-    ids = [q["_id"] for q in quizzesDone]
+    ids = [q["quiz_id"] for q in quizzesDone]
     if(len(quizzesDone) < quizzes().count_documents({})):
-        item = random.choice(list(quizzes().find({"_id": {"$nin": ids}})))
+        item = random.choice(list(quizzes().find({"_id": {"$nin": ids}}))) # PB: on compare un ObjectId avec un string
+        context = {
+            "user": session.get("user"),
+            "userQuizzesDone": len(quizzesDone),
+            "totalQuizzes": quizzes().count_documents({}),
+            "question": item.get("title"),
+            "id": str(item.get("_id"))
+        }
     else:
-        return "You have answered all quizzes!", 400
-    print(item)
-    context = {
-        "user": session.get("user"),
-        "userQuizzesDone": len(quizzesDone),
-        "totalQuizzes": quizzes().count_documents({}),
-        "question": item.get("title"),
-        "id": str(item.get("_id"))
-    }
+        context = {
+            "user": session.get("user"),
+            "userQuizzesDone": len(quizzesDone),
+            "totalQuizzes": quizzes().count_documents({}),
+        }
+    
     return render_template("quizz.html", **context)
 
+
+@quizz_bp.route("/reset", methods=["DELETE"])
+def reset_database():
+    if "user" not in session:
+        return redirect(url_for("auth.login_get"))
+
+    current_app.db.userQuizzes.delete_many({
+        "user": session["user"]
+    })
+    return jsonify({"message": f"Every quizz is deleted, now reload lol (to change)"})
 
 @quizz_bp.route("/answer", methods=["GET", "POST"])
 def quizz_answer():

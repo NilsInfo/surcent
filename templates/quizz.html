@@ -1,15 +1,23 @@
 {% extends 'base.html' %}
 {% block content %}
     <p>You are connected as {{ user }}</p>
-    <p>You have answered {{ userQuizzesDone }} out of {{ totalQuizzes }} quizzes.</p>
 
-    {{question}}
+    {% if userQuizzesDone != totalQuizzes %}
+        <p>You have answered {{ userQuizzesDone }} out of {{ totalQuizzes }} quizzes.</p>
 
-    <form id="quizzForm" method="POST">   
-        <input type="hidden" name="id" value="{{ id }}">
-        <input type="text" name="value" placeholder="Value between 0 and 100">
-        <button type="button" onclick="submitAnswer()">Submit</button>
-    </form>
+        {{question}}
+
+        <form id="quizzForm" method="POST">   
+            <input type="hidden" name="id" value="{{ id }}">
+            <input type="text" name="value" placeholder="Value between 0 and 100">
+            <button type="button" onclick="submitAnswer()">Submit</button>
+        </form>
+    {% else %}
+        <p>You have answered every quizzes.</p>
+        <button type="button" onclick="reset()">Reset database to 0 quizz done</button>
+
+    {% endif %}
+    
 
     <div id="result"></div>
 
@@ -35,6 +43,14 @@
             const response = await fetch("/quizz/answer", {
                 method: "POST",
                 body: formData
+            });
+
+            const data = await response.json();
+            document.getElementById("result").innerText = data.message;
+        }
+        async function reset() {
+            const response = await fetch("/quizz/reset", {
+                method: "DELETE",
             });
 
             const data = await response.json();
