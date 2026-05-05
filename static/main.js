@@ -90,7 +90,7 @@ for(let i = 0; i < 10; i++)
       smallGuy.scale.setScalar(0.1)
       smallGuy.rotation.y = Math.PI / 2;
       scene.add( smallGuy );
-
+      smallGuy.lookAt(0, 0, 0); // le smallGuy semble mal orienté
       mixers[i] = new THREE.AnimationMixer(smallGuy);
       const animations = gltf.animations;
 
