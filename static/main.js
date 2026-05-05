@@ -22,6 +22,10 @@ document.body.appendChild( renderer.domElement );
 const ambientLight = new THREE.AmbientLight(0xffffff, 1);
 scene.add(ambientLight);
 
+// background pas noir
+scene.background = new THREE.Color( 0xbde0fe );
+scene.fog = new THREE.Fog( 0xa0a0a0, 10, 50 );
+
 // Lumière directionnelle — simule le soleil
 const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
 directionalLight.position.set(5, 5, 5);
