@@ -13,7 +13,20 @@
 
     <div id="result"></div>
 
-    <button><a href="/quizz">New quizz</a></button>
+        <button><a href="/quizz">New quizz</a></button>
+
+    <!-- PERMET DE NE PAS DEVOIR FAIRE UN FRONT AVEC VITE - A REFLECHIR -->
+    <script type="importmap">
+        {
+            "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.174/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.174/examples/jsm/",
+            "stats.js": "https://cdn.jsdelivr.net/npm/three@0.174/examples/jsm/libs/stats.module.js"
+            }
+        }
+    </script>
+    <script type="module" src="{{ url_for('static', filename='main.js') }}"></script>
+
     <script>    
 
         async function submitAnswer() {
