@@ -31,7 +31,7 @@ def quizz():
             "userQuizzesDone": len(quizzesDone),
             "totalQuizzes": quizzes().count_documents({}),
         }
-    
+        
     return render_template("quizz.html", **context)
 
 
@@ -43,7 +43,8 @@ def reset_database():
     current_app.db.userQuizzes.delete_many({
         "user": session["user"]
     })
-    return jsonify({"message": f"Every quizz is deleted, now reload lol (to change)"})
+
+    return {"message": "user quizzes have been deleted", "code": 200}
 
 @quizz_bp.route("/answer", methods=["GET", "POST"])
 def quizz_answer():

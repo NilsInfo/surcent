@@ -55,6 +55,9 @@
 
             const data = await response.json();
             document.getElementById("result").innerText = data.message;
+            if(data.code == 200){
+                location.reload();
+            }
         }
     </script>
 {% endblock  %}
