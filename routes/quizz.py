@@ -15,9 +15,9 @@ def quizzes_users():
 @quizz_bp.route("/", methods=["GET"])
 def quizz():
     quizzesDone = list(quizzes_users().find({"user": session.get("user")}))
-    ids = [q["quiz_id"] for q in quizzesDone]
+    ids = [ObjectId(q["quiz_id"]) for q in quizzesDone]
     if(len(quizzesDone) < quizzes().count_documents({})):
-        item = random.choice(list(quizzes().find({"_id": {"$nin": ids}}))) # PB: on compare un ObjectId avec un string
+        item = random.choice(list(quizzes().find({"_id": {"$nin": ids}}))) 
         context = {
             "user": session.get("user"),
             "userQuizzesDone": len(quizzesDone),
