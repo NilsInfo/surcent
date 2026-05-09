@@ -50,45 +50,30 @@ let bottom = 0
 // ajout des petits bonhommes
 let mixers = [];
 const center = new THREE.Vector3(0, 0, 0);
-const radius = 1
+const radius = 1.17; // Corrige l'origine des smallGuys, qui devrait être à leur pied
+const positions = []
+const threshold = 0.3; // Pour ne pas que les persos se superposent
 for(let i = 0; i < 10; i++)
 {
   loader.load('/static/3D_objects/bonhomme3animations.glb', function ( gltf ) {
     
-      // current position :
-      //  2 on top of globe - 6 in the middle - 2 bottom
       const smallGuy = gltf.scene
-      // compute position 
-      if (top < 2)
-      {
-        const angle = (top / 2) * Math.PI * 2
-        top++
-        smallGuy.position.set(          
-          center.x + Math.cos(angle) * radius,
-          center.y + 1,
-          center.z + Math.sin(angle) * radius
-        )
+  
+      let x = Math.random()*2*Math.PI
+      let y = Math.random()*2*Math.PI
+      let z = Math.random()
+      while(checkIfTooClose(positions, [calcX(x,y,z), calcY(x,y,z), calcZ(x,y,z)], threshold)){
+        x = Math.random()*2*Math.PI
+        y = Math.random()*2*Math.PI
+        z = Math.random()
       }
-      else if (middle < 6)
-      {
-        const angle = (middle / 6) * Math.PI * 2
-        middle++
-        smallGuy.position.set(          
-          center.x + Math.cos(angle) * radius,
-          center.y,
-          center.z + Math.sin(angle) * radius
-        )
-      }
-      else
-      {
-        const angle = (bottom / 2) * Math.PI * 2
-        bottom++
-        smallGuy.position.set(          
-          center.x + Math.cos(angle) * radius,
-          center.y - 1,
-          center.z + Math.sin(angle) * radius
-        )
-      }
+      
+      positions.push([calcX(x,y,z), calcY(x,y,z), calcZ(x,y,z)])
+      smallGuy.position.set(          
+        calcX(x,y,z),
+        calcY(x,y,z),
+        calcZ(x,y,z)
+      )
       smallGuy.scale.setScalar(0.1)
       smallGuy.lookAt(center) // to rotate the guy according to its position (always look at the center of the globe)
         smallGuy.rotateX(Math.PI/2) // to rotate the guy according to its position (always look at the center of the globe)
@@ -99,7 +84,6 @@ for(let i = 0; i < 10; i++)
       mixers[i] = new THREE.AnimationMixer(smallGuy);
       const animations = gltf.animations;
 
-      //console.log(animations)
 
       if (animations && animations.length > 0) {
         const action = mixers[i].clipAction(animations[4]); // idle low animation
@@ -140,9 +124,9 @@ function animate( time ) {
   if(globe && box){
     let xmov=time/2000
     let ymov = time/1000
-    box.position.x = Math.cos(xmov)*Math.cos(ymov);
-    box.position.y = Math.sin(xmov)*Math.cos(ymov);
-    box.position.z = Math.sin(ymov);
+    box.position.x = calcX(xmov,ymov,0);
+    box.position.y = calcY(xmov,ymov,0);
+    box.position.z = calcZ(xmov,ymov,0);
     box.lookAt(0, 0, 0); // to rotate the box according to its position (always look at the center of the globe)
   }
 
@@ -159,3 +143,23 @@ function animate( time ) {
   stats.end();
 }
 renderer.setAnimationLoop( animate );
+
+function checkIfTooClose(positions,posToCheck, threshold){
+  for(let i=0; i<positions.length; i++){
+    if(Math.abs(posToCheck[0]-positions[i][0])<threshold && Math.abs(posToCheck[1]-positions[i][1])<threshold && Math.abs(posToCheck[2]-positions[i][2])<threshold){
+      console.log("too close !")
+      return true;
+    }
+  }
+  return false;
+}
+
+function calcX(x,y,z){
+  return Math.cos(x)*Math.cos(y)*radius        
+}
+function calcY(x,y,z){
+  return Math.sin(x)*Math.cos(y)*radius        
+}
+function calcZ(x,y,z){
+  return Math.sin(y)*radius
+}
