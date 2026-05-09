@@ -41,6 +41,8 @@ loader.load( '/static/3D_objects/test.glb', function ( gltf ) {
   console.error( error );
 } );
 
+const axesHelper = new THREE.AxesHelper( 5 );
+scene.add( axesHelper );
 
 let top = 0
 let middle = 0
@@ -88,9 +90,12 @@ for(let i = 0; i < 10; i++)
         )
       }
       smallGuy.scale.setScalar(0.1)
-      smallGuy.rotation.y = Math.PI / 2;
+      smallGuy.lookAt(center) // to rotate the guy according to its position (always look at the center of the globe)
+        smallGuy.rotateX(Math.PI/2) // to rotate the guy according to its position (always look at the center of the globe)
+        smallGuy.rotateZ(Math.PI) // to rotate the guy according to its position (always look at the center of the globe)
+      
       scene.add( smallGuy );
-      smallGuy.lookAt(0, 0, 0); // le smallGuy semble mal orienté
+
       mixers[i] = new THREE.AnimationMixer(smallGuy);
       const animations = gltf.animations;
 
