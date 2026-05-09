@@ -34,7 +34,7 @@ scene.add(directionalLight);
 // LOAD MY OBJECT
 const loader = new GLTFLoader();
 let globe
-loader.load( '/static/3D_objects/test.glb', function ( gltf ) {
+loader.load( '/static/3D_objects/terrev1.glb', function ( gltf ) {
   globe = gltf.scene
   scene.add( globe );
 }, undefined, function ( error ) {
