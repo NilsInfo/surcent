@@ -1,15 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
-    <p>You are connected as {{ user }}</p>
 
     {% if userQuizzesDone != totalQuizzes %}
         <p>You have answered {{ userQuizzesDone }} out of {{ totalQuizzes }} quizzes.</p>
 
-        {{question}}
+        <h2 class="question">{{question}}</h2>
 
-        <form id="quizzForm" method="POST">   
+        <form id="quizz-form" method="POST">
+            <div class="slidecontainer">
+                <input id="answerSlider" type="range" min="0" name="value" max="100" value="50" class="slider" >
+            </div>
             <input type="hidden" name="id" value="{{ id }}">
-            <input type="text" name="value" placeholder="Value between 0 and 100">
+            <h2 id="sliderValue"></h2>
             <button type="button" onclick="submitAnswer()">Submit</button>
         </form>
     {% else %}
@@ -36,9 +38,16 @@
     <script type="module" src="{{ url_for('static', filename='main.js') }}"></script>
 
     <script>    
+        var slider = document.getElementById("answerSlider");
+        var output = document.getElementById("sliderValue");
+        output.innerHTML = slider.value; // Display the default slider value
 
+        // Update the current slider value each time its drag
+        slider.oninput = function() {
+        output.innerHTML = this.value;
+        }
         async function submitAnswer() {
-            const form = document.getElementById("quizzForm");
+            const form = document.getElementById("quizz-form");
             const formData = new FormData(form); 
             const response = await fetch("/quizz/answer", {
                 method: "POST",
