@@ -5,8 +5,22 @@ import Stats from 'stats.js';
 
 // CREATE SCENE AND CAMERA
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 const clock = new THREE.Clock();
+
+
+// camera variables
+let camera_travel_time = 1.5; // seconds
+let elapsed = 0;
+let traveling = false;
+let target = new THREE.Vector3(); // initial target is world view
+let world_view_target = new THREE.Vector3(0, 0, 5);
+let fov = 75;
+let aspect = window.innerWidth / window.innerHeight;// TODO update on window size change ?
+let near = 0.1;
+let far = 1000;
+
+// add camera
+const camera = new THREE.PerspectiveCamera( fov, aspect, near, far );
 
 // CREATE Panel to see FPS
 const stats = new Stats();
@@ -97,6 +111,9 @@ for(let i = 0; i < 10; i++)
   } );
 
   }
+
+
+
 // TRY HAVING A box ABOVE
 const width = 0.2
 let px = 1+ width/2;
@@ -109,6 +126,14 @@ const material = new THREE.MeshPhongMaterial({
 const box = new THREE.Mesh( new THREE.BoxGeometry( width, width, width ), material );
 box.position.set(px, py, pz )
 scene.add(box)
+
+// adding a static box to use as anchor for camera 
+const nationalbox = new THREE.Mesh( new THREE.BoxGeometry( width, width, width ), material );
+nationalbox.position.set(px, py, pz )
+scene.add(nationalbox)
+// target view is a vector one unit outside the globe in the direction of the box
+let national_view_target = new THREE.Vector3(px*1.5, py*1.5, pz*1.5);
+
 
 camera.position.z = 5;
 // OrbitControls to orbit around 0
@@ -139,6 +164,21 @@ function animate( time ) {
     if (mixers[i]) mixers[i].update(delta);
   }
 
+  // move camera if traveling
+  if(traveling){
+    elapsed += delta;
+    // get next position of the camera
+    const t = Math.min(elapsed / camera_travel_time, 1);
+    camera.position.lerpVectors(camera.position, target, t);
+    camera.lookAt(0, 0, 0);
+    if(t === 1){
+      traveling = false;
+      elapsed = 0;
+      console.log("camera move over")
+
+    }
+  }
+
   renderer.render( scene, camera );
   stats.end();
 }
@@ -162,4 +202,23 @@ function calcY(x,y,z){
 }
 function calcZ(x,y,z){
   return Math.sin(y)*radius
+}
+
+document.getElementById("national-box").addEventListener('click', () => {onNationalBoxClick()});
+
+ function onNationalBoxClick(){
+  // if camera is already moving, do nothing
+  console.log("camera move start")
+  if(traveling) return;
+
+  traveling = true;
+  target = national_view_target;
+}
+
+document.getElementById("world-box").addEventListener('click', () => {onWorldBoxClick()});
+
+function onWorldBoxClick(){
+  if(traveling) return;
+  traveling = true;
+  target = world_view_target;
 }

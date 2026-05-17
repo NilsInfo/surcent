@@ -3,7 +3,6 @@
 
 {% block content %}
     <h1>Home</h1>
-
     {% if user %}
         <a href="/quizz">Go to quizzes</a>
     {% else %}
@@ -20,6 +19,9 @@
             }
         }
     </script>
+    
+    <button id="national-box">National Box</button>
+    <button id="world-box">World Box</button>
 <script type="module" src="{{ url_for('static', filename='main.js') }}"></script>
     
 {% endblock %}
