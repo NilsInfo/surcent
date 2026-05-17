@@ -64,12 +64,12 @@ let bottom = 0
 // ajout des petits bonhommes
 let mixers = [];
 const center = new THREE.Vector3(0, 0, 0);
-const radius = 1.17; // Corrige l'origine des smallGuys, qui devrait être à leur pied
+const radius = 1; // Corrige l'origine des smallGuys, qui devrait être à leur pied
 const positions = []
 const threshold = 0.3; // Pour ne pas que les persos se superposent
 for(let i = 0; i < 10; i++)
 {
-  loader.load('/static/3D_objects/bonhomme3animations.glb', function ( gltf ) {
+  loader.load('/static/3D_objects/bonhommesurcent2.glb', function ( gltf ) {
     
       const smallGuy = gltf.scene
   
