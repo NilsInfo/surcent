@@ -97,10 +97,10 @@ for(let i = 0; i < 10; i++)
 
       mixers[i] = new THREE.AnimationMixer(smallGuy);
       const animations = gltf.animations;
-
+      console.log(animations);
 
       if (animations && animations.length > 0) {
-        const action = mixers[i].clipAction(animations[4]); // idle low animation
+        const action = mixers[i].clipAction(animations[2]); // idle low animation
         action.play();
       }
 
